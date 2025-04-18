@@ -1,0 +1,12 @@
+services:
+  backend:
+    build:
+      context: ./
+      args:
+        ENV: ${ENV}
+    volumes:
+      - .:/code
+    ports:
+      - 80:80
+    env_file:
+      - .env

@@ -1,0 +1,48 @@
+[tool.poetry]
+name = "mufasa"
+version = "0.1.0"
+description = "Liontrade backend API for fetching stock market data"
+authors = ["Liontrade developers <"]
+readme = "README.md"
+package-mode = false
+
+[tool.poetry.dependencies]
+python = "^3.12"
+fastapi = "^0.115.12"
+pydantic = "^2.11.1"
+uvicorn = "^0.34.0"
+pydantic-settings = "^2.8.1"
+
+
+[tool.poetry.group.dev.dependencies]
+black = "^25.1.0"
+mypy = "^1.15.0"
+flake8 = "^7.2.0"
+ruff = "^0.11.4"
+isort = "^6.0.1"
+types-requests = "^2.32.0.20250328"
+pytest = "^8.3.5"
+pytest-cov = "^6.1.1"
+
+[build-system]
+requires = ["poetry-core"]
+build-backend = "poetry.core.masonry.api"
+
+[tool.black]
+line-length = 120
+
+[tool.ruff]
+line-length = 120
+
+[tool.mypy]
+python_version = "3.12"
+disallow_untyped_defs = true
+no_implicit_optional = true
+check_untyped_defs = true
+warn_return_any = true
+warn_unused_ignores = true
+show_error_codes = true
+
+plugins = [
+    "pydantic.mypy"
+]
