@@ -7,8 +7,17 @@ router = APIRouter(
     tags=["fetch_ticker_latest_price"],
 )
 
-@router.get("/{ticker}")
-async def fetch_ticker_latest_price(ticker: str):
+from fastapi import APIRouter, HTTPException, Query
+import yfinance as yf
+from datetime import datetime, timedelta
+
+router = APIRouter(
+    prefix="/fetch_ticker_latest_price",
+    tags=["fetch_ticker_latest_price"],
+)
+
+@router.get("")
+async def fetch_ticker_latest_price(ticker: str = Query(..., description="The stock ticker symbol")):
     end_date = datetime.now()
     start_date = end_date - timedelta(days=2)
     try:
