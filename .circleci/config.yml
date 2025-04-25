@@ -1,35 +1,49 @@
-# This config was automatically generated from your source code
-# Stacks detected: deps:python:.,package_manager:poetry:.
 version: 2.1
+
 orbs:
   python: circleci/python@2
+
 jobs:
-  test-python:
-    # Install dependencies and run tests
+  test-and-build:
+    description: |
+      1. Install dependencies
+      2. Check code formatting (black, flake8, isort)
+      3. Check code quality (mypy)
+      4. Run tests (pytest)
     docker:
       - image: cimg/python:3.12-node
     steps:
       - checkout
+
       - python/install-packages:
           pkg-manager: poetry
+
+      - run:
+          name: Check code formatting with black
+          command: poetry run black . --check
+
+      - run:
+          name: Check import sorting with isort
+          command: poetry run isort . --check-only
+
+      - run:
+          name: Lint with flake8
+          command: poetry run flake8 .
+
+      - run:
+          name: Static type check with mypy
+          command: poetry run mypy .
+
       - run:
           name: Run tests
-          command: poetry run pytest --junitxml=junit.xml || ((($? == 5)) && echo 'Did not find any tests to run.')
+          command: |
+            poetry run pytest --junitxml=junit.xml || ((($? == 5)) && echo 'Did not find any tests to run.')
+
       - store_test_results:
           path: junit.xml
-  deploy:
-    # This is an example deploy job, not actually used by the workflow
-    docker:
-      - image: cimg/base:stable
-    steps:
-      # Replace this with steps to deploy to users
-      - run:
-          name: deploy
-          command: '#e.g. ./deploy.sh'
+
 workflows:
-  build-and-test:
+  version: 2
+  pr-check:
     jobs:
-      - test-python
-    # - deploy:
-    #     requires:
-    #       - test-python
+      - test-and-build

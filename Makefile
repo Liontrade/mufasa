@@ -10,10 +10,10 @@ format:
 	make black isort
 
 lint:
-	poetry run ruff check app
+	poetry run flake8 app
 
 fix:
-	poetry run ruff check app --fix
+	poetry run black . && poetry run isort app
 
 type-check:
 	poetry run mypy app
@@ -22,3 +22,4 @@ test:
 	PYTHONPATH=. poetry run pytest --cov=app --cov-report=term-missing
 
 all: format lint type-check test
+
